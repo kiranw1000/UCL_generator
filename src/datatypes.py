@@ -48,3 +48,32 @@ class Match():
     
     def __repr__(self):
         return f"Match(home={self.home}, away={self.away})"
+
+class Schedule():
+    '''
+    Represents the schedule for a team.
+    '''
+    def __init__(self, team: Team):
+        self.team = team
+        self.matches = {p: [] for p in Pot}
+        self.opponents = []
+
+    def add_match(self, match: Match):
+        if match.home == self.team:
+            self.matches[match.away.pot].append(match)
+            self.opponents.append(match.away)
+        elif match.away == self.team:
+            self.matches[match.home.pot].append(match)
+            self.opponents.append(match.home)
+
+    def __repr__(self):
+        ret = f"Schedule for {self.team.name}: \n"
+        for pot, matches in self.matches.items():
+            if matches:
+                ret += f"  Pot {pot}:\n"
+            for match in matches:
+                ret += f"    {match.home.name+'(A)' if match.away == self.team else match.away.name+'(H)'}\n"
+        return ret
+    
+    def __len__(self):
+        return sum(len(matches) for matches in self.matches.values())
