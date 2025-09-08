@@ -15,6 +15,9 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
     p2 = set(filter(lambda t: t.pot == Pot.TWO, teams))
     p3 = set(filter(lambda t: t.pot == Pot.THREE, teams))
     p4 = set(filter(lambda t: t.pot == Pot.FOUR, teams))
+    countries = [team.country for team in teams]
+    unique_countries = set(countries)
+    country_counts = {country: countries.count(country) for country in unique_countries}
     pots = {
         Pot.ONE: p1,
         Pot.TWO: p2,
@@ -28,7 +31,7 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
             opp_dict[p]["home"].append(team)
             opp_dict[p]["away"].append(team)
     for pot, pot_teams in pots.items():
-        for team in pot_teams:
+        for team in sorted(pot_teams, key=lambda x: country_counts[x.country]):
             for pot_to_choose in list(Pot):
                 print(pot_to_choose)
                 scheduled_pot_teams = schedules[team].matches[pot_to_choose]
