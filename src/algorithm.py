@@ -60,7 +60,6 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
                         home = not home
                     except:
                         print(f"Could not schedule match for {team} from pot {pot} against pot {pot_to_choose}")
-                # print(schedules[team])
     # End implementation here
     end = time.time()
     print(f"Draw algorithm took {end - start} seconds")
@@ -68,6 +67,9 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
     for team, schedule in schedules.items():
         print(f"  {team}: {len(schedule)} matches")
         print(schedule)
+    print("Opponent Dictionary:")
+    for pot, teams in opp_dict.items():
+        print(f"  {pot}: {teams}")
     return schedules
 
 def get_pot_teams(team: Team, schedule: Schedule, pot: Pot) -> set[Team]:

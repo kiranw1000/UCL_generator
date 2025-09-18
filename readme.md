@@ -9,3 +9,4 @@ Each year, the UEFA Champions League draws 8 matches for each of the 36 teams in
 2. A team cannot play another team twice
 3. Each team plays 1 home game and 1 away game against teams from each pot including their own pot.
 4. A team cannot play a team from its own country.
+5. A team cannot play more than 2 teams from any country.

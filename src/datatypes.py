@@ -56,15 +56,15 @@ class Schedule():
     def __init__(self, team: Team):
         self.team = team
         self.matches = {p: [] for p in Pot}
-        self.opponents = []
+        self.opponents = set()
 
     def add_match(self, match: Match):
         if match.home == self.team:
             self.matches[match.away.pot].append(match)
-            self.opponents.append(match.away)
+            self.opponents.add(match.away)
         elif match.away == self.team:
             self.matches[match.home.pot].append(match)
-            self.opponents.append(match.home)
+            self.opponents.add(match.home)
 
     def __repr__(self):
         ret = f"Schedule for {self.team.name}: \n"
