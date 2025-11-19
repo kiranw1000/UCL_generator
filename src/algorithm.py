@@ -3,14 +3,18 @@ import time, random
 
 random.seed(42)
 
-def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
+def core_algorithm(teams: list[Team]) -> dict[Team, Schedule]:
     '''
-    Runs the draw algorithm to schedule matches for each team.
-    Each team should play 8 matches: 4 home and 4 away against teams from different pots and countries.
+    The core algorithm to schedule matches for each team.
+    
+    Args:
+        teams (list[Team]): A list of Team objects representing the teams participating in the tournament
+        
+    Returns:
+        dict([Team, Schedule]): A dictionary mapping each team to its scheduled matches.
     '''
-    start = time.time()
-    schedules = {team: Schedule(team) for team in teams}
     # Start implementation here
+    schedules = {team: Schedule(team) for team in teams}
     p1 = set(filter(lambda t: t.pot == Pot.ONE, teams))
     p2 = set(filter(lambda t: t.pot == Pot.TWO, teams))
     p3 = set(filter(lambda t: t.pot == Pot.THREE, teams))
@@ -33,7 +37,6 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
     for pot, pot_teams in pots.items():
         for team in sorted(pot_teams, key=lambda x: country_counts[x.country]):
             for pot_to_choose in list(Pot):
-                print(pot_to_choose)
                 scheduled_pot_teams = schedules[team].matches[pot_to_choose]
                 home = True if len(scheduled_pot_teams) == 0 else not scheduled_pot_teams[-1].home == team
                 for _ in range(2-len(scheduled_pot_teams)):
@@ -41,7 +44,6 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
                     available_opps = get_available_by_pot(schedules[team], pot_to_choose, available_opps)
                     chosen_team = random.choice(available_opps) if available_opps else None
                     try:
-                        # print(chosen_team)
                         home_team = team if home else chosen_team
                         away_team = chosen_team if home else team
                         created_match = Match(home=home_team, away=away_team)
@@ -60,15 +62,8 @@ def run_draw(teams: list[Team]) -> dict[Team, list[Match]]:
                         home = not home
                     except:
                         print(f"Could not schedule match for {team} from pot {pot} against pot {pot_to_choose}")
-                # print(schedules[team])
-    # End implementation here
-    end = time.time()
-    print(f"Draw algorithm took {end - start} seconds")
-    print("Generated schedules:")
-    for team, schedule in schedules.items():
-        print(f"  {team}: {len(schedule)} matches")
-        print(schedule)
     return schedules
+    # End implementation here
 
 def get_pot_teams(team: Team, schedule: Schedule, pot: Pot) -> set[Team]:
     '''
@@ -100,3 +95,20 @@ def is_available(team: Team, schedule:list[Match], home: bool, pot: Pot) -> bool
     else:
         away_matches = list(filter(lambda m: m.away == team and m.home.pot == pot, schedule))
         return len(away_matches) == 0
+
+def run_draw(teams: list[Team]) -> dict[Team, Schedule]:
+    '''
+    Runs the draw algorithm to schedule matches for each team.
+    Each team should play 8 matches: 4 home and 4 away against teams from different pots and countries.
+    
+    Args:
+        teams (list[Team]): A list of Team objects representing the teams participating in the tournament
+    
+    Returns:
+        dict([Team, Schedule]): A dictionary mapping each team to its scheduled matches.
+    '''
+    start = time.time()
+    schedules = core_algorithm(teams)
+    end = time.time()
+    print(f"Draw algorithm took {end - start} seconds")
+    return schedules
