@@ -57,10 +57,8 @@ def test_schedule(team: Team, schedule: Schedule):
         away_pots.add(opponent.pot)
     assert home_pots == away_pots, "Home pots and away pots do not match"
 
-# def test_run_draw():
-#     with open("teams.json") as f:
-#         teams = json.load(f)
-#     teams = [Team(team["name"], Pot(team["pot"]), team["country"]) for team in teams]
-#     schedule = run_draw(teams)
-#     for team, matches in schedule.items():
-#         assert verify_schedule(team, matches)
+def test_all_teams_scheduled():
+    '''
+    Verifies that all teams are scheduled.
+    '''
+    assert list(schedule.keys()) == teams, "Not all teams are scheduled"
