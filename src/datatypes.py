@@ -59,6 +59,15 @@ class Schedule():
         self.opponents = []
 
     def add_match(self, match: Match):
+        """
+        Adds a match to the schedule.
+        
+        Args:
+            match (Match): The match to be added to the schedule.
+            
+        Returns:
+            None
+        """
         if match.home == self.team:
             self.matches[match.away.pot].append(match)
             self.opponents.append(match.away)
